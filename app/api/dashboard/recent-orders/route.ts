@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAllOrders } from '@/lib/orders'
+import { getRecentOrders } from '@/lib/orders'
 import { jwtVerify } from 'jose'
 
 const JWT_SECRET = new TextEncoder().encode(
@@ -29,10 +29,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const orders = await getAllOrders()
-    // Return only the 10 most recent orders
-    const recentOrders = orders.slice(0, 10)
-    
+    const recentOrders = await getRecentOrders(10)
     return NextResponse.json({ orders: recentOrders })
   } catch (error) {
     console.error('Error fetching recent orders:', error)

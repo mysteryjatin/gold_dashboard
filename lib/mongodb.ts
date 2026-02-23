@@ -2,6 +2,16 @@ import { MongoClient, Db, MongoClientOptions } from 'mongodb'
 
 const dbName = process.env.MONGODB_DB_NAME || 'goldenedge'
 
+async function ensureIndexes(db: Db): Promise<void> {
+  const orders = db.collection('orders')
+  const ratings = db.collection('ratings')
+  await Promise.all([
+    orders.createIndex({ status: 1, createdAt: -1 }),
+    orders.createIndex({ createdAt: -1 }),
+    ratings.createIndex({ createdAt: -1 }),
+  ])
+}
+
 function getUri(): string {
   const uri = process.env.MONGODB_URI
   if (!uri) throw new Error('Please set MONGODB_URI in .env')
@@ -26,24 +36,30 @@ function getClientOptions(): MongoClientOptions {
 declare global {
   // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined
+  // eslint-disable-next-line no-var
+  var _mongoIndexesPromise: Promise<void> | undefined
 }
 
 function getClientPromise(): Promise<MongoClient> {
   const uri = getUri()
   const options = getClientOptions()
-  if (process.env.NODE_ENV === 'development') {
-    if (!global._mongoClientPromise) {
-      global._mongoClientPromise = new MongoClient(uri, options).connect()
-    }
-    return global._mongoClientPromise
+  // Reuse a single connection in both dev and production so every API request
+  // doesn't pay for a new MongoDB connection (especially slow to Atlas from a VPS).
+  if (!global._mongoClientPromise) {
+    global._mongoClientPromise = new MongoClient(uri, options).connect()
   }
-  return new MongoClient(uri, options).connect()
+  return global._mongoClientPromise
 }
 
 export async function getDb(): Promise<Db> {
   try {
     const client = await getClientPromise()
-    return client.db(dbName)
+    const db = client.db(dbName)
+    if (!global._mongoIndexesPromise) {
+      global._mongoIndexesPromise = ensureIndexes(db)
+    }
+    await global._mongoIndexesPromise
+    return db
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     if (msg.includes('timed out') || msg.includes('Server selection')) {

@@ -64,31 +64,33 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Gather device and location information for email notification
+    // Send login notification email in the background (do not block the response).
+    // Fetching location from ipapi.co can add 1–5+ seconds; we do it after returning the login response.
     const userAgent = request.headers.get('user-agent') || 'Unknown'
     const ipAddress = getClientIP(request)
     const deviceInfo = parseUserAgent(userAgent)
-    
-    // Get location information (non-blocking - don't wait if it fails)
-    let location = null
-    try {
-      location = await getLocationFromIP(ipAddress)
-    } catch (error) {
-      console.error('Failed to get location:', error)
-    }
-
-    // Send login notification email (skip for offline demo user)
     if (user._id?.toString() !== OFFLINE_DEMO_USER_ID) {
-      sendLoginNotification({
-        email: user.email,
-        ipAddress,
-        userAgent,
-        location: location || undefined,
-        deviceInfo,
-        timestamp: new Date(),
-      }).catch((error) => {
-        console.error('Failed to send login notification email:', error)
-      })
+      getLocationFromIP(ipAddress)
+        .then((location) =>
+          sendLoginNotification({
+            email: user.email,
+            ipAddress,
+            userAgent,
+            location: location ?? undefined,
+            deviceInfo,
+            timestamp: new Date(),
+          })
+        )
+        .catch(() => {
+          // Location failed; still send email without location
+          sendLoginNotification({
+            email: user.email,
+            ipAddress,
+            userAgent,
+            deviceInfo,
+            timestamp: new Date(),
+          }).catch((err) => console.error('Failed to send login notification email:', err))
+        })
     }
 
     // Create JWT token

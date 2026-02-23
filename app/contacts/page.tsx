@@ -100,10 +100,6 @@ export default function ContactsPage() {
         </section>
 
         <PageCard title="Contact form submissions (from website)">
-          <p className="text-dashboard-text-muted text-sm mb-4">
-            These are saved when visitors submit the contact form on the main website. Use the same
-            MongoDB database (MONGODB_URI + MONGODB_DB_NAME) for both dashboard and website.
-          </p>
           <div className="overflow-x-auto">
             {loading ? (
               <div className="py-8 text-center text-dashboard-text-muted">Loading...</div>

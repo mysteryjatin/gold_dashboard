@@ -67,6 +67,18 @@ export async function getAllOrders(): Promise<OrderRecord[]> {
   return docs.map(docToRecord)
 }
 
+/** Fetch only the N most recent orders (e.g. for dashboard). Uses index, no full scan. */
+export async function getRecentOrders(limit: number = 10): Promise<OrderRecord[]> {
+  const db = await getDb()
+  const coll = db.collection<OrderDoc>(ORDERS_COLLECTION)
+  const docs = await coll
+    .find({})
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .toArray()
+  return docs.map(docToRecord)
+}
+
 export async function getCompletedOrders(): Promise<OrderRecord[]> {
   const db = await getDb()
   const coll = db.collection<OrderDoc>(ORDERS_COLLECTION)
