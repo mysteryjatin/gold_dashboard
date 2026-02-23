@@ -105,10 +105,17 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
 
+    // Use Secure cookie only when the request is over HTTPS (direct or via proxy).
+    // On VPS behind HTTP or without SSL, secure: true would prevent the cookie from being stored.
+    const proto = request.headers.get('x-forwarded-proto') ?? request.headers.get('x-forwarded-ssl')
+    const isHttps = proto === 'https' || (request.nextUrl?.protocol === 'https:')
+    const useSecureCookie = process.env.NODE_ENV === 'production' && isHttps
+
     response.cookies.set('auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: useSecureCookie,
       sameSite: 'lax',
+      path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
 
