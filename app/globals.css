@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --dashboard-bg: #0E0E11;
+  --dashboard-sidebar: #131318;
+  --dashboard-card: #1B1C22;
+  --dashboard-border: #2A2B33;
+  --dashboard-gold: #E6B566;
+  --dashboard-gold-hover: #F1C97A;
+  --dashboard-peach: #FFD6B3;
+  --dashboard-text: #FFFFFF;
+  --dashboard-text-secondary: #B7B7C2;
+  --dashboard-text-muted: #8B8B95;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--dashboard-bg);
+  color: var(--dashboard-text);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dashboard-sidebar);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dashboard-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dashboard-gold);
+}
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  @apply fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300;
+}
+
+.sidebar-overlay.closed {
+  @apply opacity-0 pointer-events-none;
+}
+
+/* Settings: gold accent for checkboxes */
+input[type="checkbox"] {
+  accent-color: var(--dashboard-gold);
+}
+
+/* Login page background animations */
+@keyframes login-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  33% { transform: translate(30px, -40px) scale(1.05); opacity: 0.5; }
+  66% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.35; }
+}
+
+@keyframes login-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  50% { transform: translate(-40px, -30px) scale(1.1); opacity: 0.45; }
+}
+
+@keyframes login-orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+  50% { transform: translate(25px, 35px) scale(1.08); opacity: 0.4; }
+}
+
+@keyframes login-gradient-drift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
