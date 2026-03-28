@@ -5,10 +5,13 @@ const dbName = process.env.MONGODB_DB_NAME || 'goldenedge'
 async function ensureIndexes(db: Db): Promise<void> {
   const orders = db.collection('orders')
   const ratings = db.collection('ratings')
+  const licenses = db.collection('licenses')
   await Promise.all([
     orders.createIndex({ status: 1, createdAt: -1 }),
     orders.createIndex({ createdAt: -1 }),
     ratings.createIndex({ createdAt: -1 }),
+    licenses.createIndex({ licenseKey: 1 }, { unique: true }),
+    licenses.createIndex({ status: 1, createdAt: -1 }),
   ])
 }
 
@@ -75,3 +78,4 @@ export const USERS_COLLECTION = 'users'
 export const ORDERS_COLLECTION = 'orders'
 export const RATINGS_COLLECTION = 'ratings'
 export const CONTACTS_COLLECTION = 'contacts'
+export const LICENSES_COLLECTION = 'licenses'

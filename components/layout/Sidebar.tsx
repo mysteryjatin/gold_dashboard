@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   BarChart3,
   ShoppingCart,
-  Bot,
   Users,
   ArrowLeftRight,
   Settings,
@@ -15,6 +14,7 @@ import {
   Menu,
   Star,
   Mail,
+  KeyRound,
 } from 'lucide-react'
 import { useDashboard } from '@/components/providers/DashboardProvider'
 import { usePathname } from 'next/navigation'
@@ -26,6 +26,7 @@ const menuItems = [
   { href: '/orders', label: 'Orders', icon: ShoppingCart },
   // { href: '/bot', label: 'Bots / Products', icon: Bot },
   { href: '/users', label: 'Users', icon: Users },
+  { href: '/licenses', label: 'EA licenses', icon: KeyRound },
   { href: '/ratings', label: 'Ratings', icon: Star },
   { href: '/contacts', label: 'Contacts', icon: Mail },
   { href: '/transactions', label: 'Transactions', icon: ArrowLeftRight },

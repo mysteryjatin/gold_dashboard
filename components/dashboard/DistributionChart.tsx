@@ -4,9 +4,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import { cn } from '@/lib/utils'
 
 const DEFAULT_DISTRIBUTION_DATA = [
-  { name: 'Gold Sniper EA Bot', value: 48, color: '#E6B566' },
-  { name: 'Crypto Sniper EA Bot', value: 32, color: '#4B82FF' },
-  { name: 'Forex Sniper EA Bot', value: 20, color: '#22C55E' },
+  { name: 'Gold Sniper EA Bot', value: 60, color: '#E6B566' },
+  { name: 'Forex Sniper EA Bot', value: 40, color: '#22C55E' },
 ]
 
 interface DistributionChartProps {

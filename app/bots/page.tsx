@@ -59,9 +59,9 @@ export default function BotsPage() {
         <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <StatCard
             label="Total Products"
-            value="3"
+            value={bots.length.toString()}
             icon={Bot}
-            trend={{ value: 'Gold, Crypto, Forex', positive: true }}
+            trend={{ value: 'Gold & Forex', positive: true }}
           />
           <StatCard
             label="Total Sales"
@@ -77,7 +77,7 @@ export default function BotsPage() {
           />
           <StatCard
             label="Active EAs"
-            value="3"
+            value={bots.filter((b) => b.status === 'active').length.toString()}
             icon={Activity}
             trend={{ value: 'Running', positive: true }}
           />

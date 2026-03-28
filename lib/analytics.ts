@@ -40,7 +40,6 @@ export interface AnalyticsData {
 // Color mapping for products (you can customize these)
 const PRODUCT_COLORS: Record<string, string> = {
   'Gold Sniper EA Bot': '#E6B566',
-  'Crypto Sniper EA Bot': '#4B82FF',
   'Forex Sniper EA Bot': '#22C55E',
 }
 
@@ -53,7 +52,6 @@ function getProductColor(productName: string): string {
   // Try partial match
   const lowerName = productName.toLowerCase()
   if (lowerName.includes('gold')) return '#E6B566'
-  if (lowerName.includes('crypto')) return '#4B82FF'
   if (lowerName.includes('forex')) return '#22C55E'
   
   // Default colors for other products
@@ -301,8 +299,10 @@ export async function getAnalyticsData(): Promise<AnalyticsData> {
     const productSales: Map<string, number> = new Map()
     completedOrders.forEach((order) => {
       order.items.forEach((item) => {
-        const current = productSales.get(item.name) || 0
-        productSales.set(item.name, current + 1)
+        const name = item.name || ''
+        if (name.toLowerCase().includes('crypto')) return
+        const current = productSales.get(name) || 0
+        productSales.set(name, current + 1)
       })
     })
 
@@ -323,8 +323,10 @@ export async function getAnalyticsData(): Promise<AnalyticsData> {
       .filter((o) => o.status === 'completed')
       .forEach((order) => {
         order.items.forEach((item) => {
-          const current = productStats.get(item.name) || { sales: 0, revenue: 0 }
-          productStats.set(item.name, {
+          const name = item.name || ''
+          if (name.toLowerCase().includes('crypto')) return
+          const current = productStats.get(name) || { sales: 0, revenue: 0 }
+          productStats.set(name, {
             sales: current.sales + 1,
             revenue: current.revenue + item.priceUSD,
           })

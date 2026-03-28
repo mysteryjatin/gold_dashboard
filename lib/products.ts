@@ -2,20 +2,18 @@ import { getDb } from './mongodb'
 import { ObjectId } from 'mongodb'
 import { getProductSalesStats } from './orders'
 
-export type ProductType = 'Gold' | 'Crypto' | 'Forex' | 'Other'
+export type ProductType = 'Gold' | 'Forex' | 'Other'
 export type ProductStatus = 'active' | 'beta' | 'inactive'
 
-/** Fixed list of the three EA bots – names must match order item names for sales aggregation. */
+/** Fixed list of the core EA bots – names must match order item names for sales aggregation. */
 export const STATIC_BOT_NAMES = [
   'Gold Sniper EA Bot',
-  'Crypto Sniper EA Bot',
   'Forex Sniper EA Bot',
 ] as const
 
 export const STATIC_BOTS: { id: string; name: string; type: ProductType; status: ProductStatus }[] = [
   { id: 'gold', name: STATIC_BOT_NAMES[0], type: 'Gold', status: 'active' },
-  { id: 'crypto', name: STATIC_BOT_NAMES[1], type: 'Crypto', status: 'active' },
-  { id: 'forex', name: STATIC_BOT_NAMES[2], type: 'Forex', status: 'active' },
+  { id: 'forex', name: STATIC_BOT_NAMES[1], type: 'Forex', status: 'active' },
 ]
 
 export interface BotWithSales {
