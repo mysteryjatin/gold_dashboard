@@ -154,14 +154,21 @@ export default function LicensesPage() {
         </section>
 
         <PageCard title="Setup for MT5 (Expert Advisors)">
+          <p className="mb-3 text-sm text-dashboard-text-secondary">
+            Customers only need a <strong className="text-dashboard-text">neutral activation host</strong> (e.g.{' '}
+            <code className="text-dashboard-gold">license.goldenedge.ai</code>), not your admin URL. Add that subdomain
+            in your DNS / hosting (same deployment as this app) so WebRequest and the EA use a name that does not reveal
+            “dashboard”.
+          </p>
           <ol className="list-decimal list-inside space-y-2 text-sm text-dashboard-text-secondary">
             <li>
-              Add this URL to MT5: <span className="text-dashboard-text">Tools → Options → Expert Advisors → Allow WebRequest</span> for your site domain only.
+              Add this URL to MT5: <span className="text-dashboard-text">Tools → Options → Expert Advisors → Allow WebRequest</span>{' '}
+              — use the same host as below (MetaTrader requires listing the site; a neutral subdomain keeps your admin
+              hostname private).
             </li>
             <li>
-              In the EA inputs, set <code className="text-dashboard-gold">LicenseActivationUrl</code> to your{' '}
-              <strong className="text-dashboard-text">live site</strong> (HTTPS), not localhost — buyers’ MT5 must reach
-              your server on the internet.
+              In the EA inputs, set <code className="text-dashboard-gold">LicenseActivationUrl</code> to the HTTPS URL
+              below (not localhost).
             </li>
           </ol>
           {isLocalhost && !envPublicUrl && (
